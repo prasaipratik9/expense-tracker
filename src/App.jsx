@@ -23,6 +23,10 @@ function App() {
     setForm({ date: "", amount: "", category: "", note: "" });
   }
 
+  //Function for handling deletion of items
+  function handleDelete(id) {
+    setTransactions((prev) => prev.filter((tx) => tx.id !== id));
+  }
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900 p-6">
       <h1 className="text-3xl font-bold text-blue-600">Expense Tracker</h1>
@@ -31,7 +35,10 @@ function App() {
       <section className="mb-8">
         <h2 className="text-xl font-semibold mb-4">Add Transaction</h2>
 
-        <form onSubmit={handleSubmit} className="flex flex-col gap-3 max-w-sm bg-white p-4 rounded-2xl shadow mx-auto">
+        <form
+          onSubmit={handleSubmit}
+          className="flex flex-col gap-3 max-w-sm bg-white p-4 rounded-2xl shadow mx-auto"
+        >
           {/* Date */}
           <label className="flex flex-col">
             <span className="font-medium">Date</span>
@@ -92,7 +99,7 @@ function App() {
 
           <button
             type="submit"
-            className="bg-red-600 text-white font-semibold py-2 rounded hover:bg-red-700 transition"
+            className="bg-green-600 text-white font-semibold py-2 rounded hover:bg-green-700 transition"
           >
             Add
           </button>
@@ -102,30 +109,39 @@ function App() {
       {/* Transactions */}
       <section className="mt-8">
         <h2 className="text-xl font-semibold mb-2">Transactions</h2>
-    {
-        transactions.length === 0  ? (
-        <p className="text-gray-500 italic">No transactions yet.</p>
+        {transactions.length === 0 ? (
+          <p className="text-gray-500 italic">No transactions yet.</p>
         ) : (
-        <ul className="space-y-3">
-          {transactions.map((tx) => (
-            <li key={tx.id}
-            className="bg-white p-4 rounded-xl shadow flex justify-between items-center">
+          <ul className="space-y-3">
+            {transactions.map((tx) => (
+              <li
+                key={tx.id}
+                className="bg-white p-4 rounded-xl shadow flex justify-between items-center"
+              >
                 <div>
                   <p className="font-semibold">{tx.category} </p>
-                  <p className="text-sm text-gray-600">{tx.note || "No Note"} </p>
-                  <p className="text-xm text-gray-400">{tx.date} </p>
+                  <p className="text-sm text-gray-600">
+                    {" "}
+                    {tx.note || "No Note"}{" "}
+                  </p>
+                  <p className="text-xm text-gray-400">{tx.date}</p>
                 </div>
 
-                <div>
-                  <p className="font-bold">
+                <div className="flex items-center gap-4">
+                  <p className="font-bold text-lg">
                     ${parseFloat(tx.amount).toFixed(2)}
                   </p>
+                   <button
+                        onClick={() => handleDelete(tx.id)}
+                        className="bg-red-600 text-white font-semibold px-3 py-1 rounded hover:bg-red-700 transition"
+                      >
+                        Delete
+                      </button>
                 </div>
-            </li>
-          ))}
-          
-        </ul>
-        ) }
+              </li>
+            ))}
+          </ul>
+        )}
       </section>
     </div>
   );
