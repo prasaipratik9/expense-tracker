@@ -1,9 +1,13 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./App.css";
 
 function App() {
-  // State-variable-to-store-all-arrays
-  const [transactions, setTransactions] = useState([]);
+  // State-variable-to-store-all-arrays (Update: Updated useState initialization to load data from localStorage on Mount)
+  const [transactions, setTransactions] = useState(()=> {
+    const saved = localStorage.getItem('transactions');
+    return saved ? JSON.parse(saved) : [];
+  }
+  );
 
   // State object to hold form input values
   const [form, setForm] = useState({
@@ -12,6 +16,11 @@ function App() {
     category: "",
     note: "",
   });
+
+  //Saving to local storage
+ useEffect(()=> {
+  localStorage.setItem('transactions', JSON.stringify(transactions));
+ }, [transactions]);
 
   // Function to handle submit events
   function handleSubmit(e) {
