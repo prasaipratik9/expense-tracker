@@ -51,6 +51,28 @@ function App() {
 
     return matchesCategory && matchesMonth;
   });
+
+  //Adding logic for Cashflow summary
+
+  //#1 Using reduce to narrow down income from the filteredTransactions array
+  const totalIncome = filteredTransactions.reduce((sum, tx) => {
+    if (tx.category === "Income") {
+      return sum + parseFloat(tx.amount);
+    }
+    return sum;
+  }, 0);
+
+  //#2 Using reduce to narrow down expenses from the filteredTransactions array
+  const totalExpense = filteredTransactions.reduce((sum, tx) => {
+    if (tx.category !== "Income") {
+      return sum + parseFloat(tx.amount);
+    }
+    return sum;
+  }, 0);
+
+  //#3 Using subtraction operator to differentiate income vs expenses
+  const netBalance = totalIncome - totalExpense;
+
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900 p-6">
       <h1 className="text-3xl font-bold text-blue-600">Expense Tracker</h1>
@@ -169,10 +191,58 @@ function App() {
           </label>
 
           {/* Reset button for filters */}
-          <button 
-          onClick={() => setFilters({category: 'All', month: 'All'})}
-          className="self-end bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition"
-          >Reset Filters</button>
+          <button
+            onClick={() => setFilters({ category: "All", month: "All" })}
+            className="self-end bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition"
+          >
+            Reset Filters
+          </button>
+        </div>
+      </section>
+
+      {/* Summary */}
+      <section className="mb-8">
+        <h2 className="text-xl font-semibold mb-4">Summary</h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {/* Total Income */}
+          <div className="bg-green-50 border border-green-200 p-4 rounded-lg">
+            <p className="text-sm text-green-700 font-medium">Total Income</p>
+            <p className="text-2xl font-bold text-green-600">
+              {totalIncome.toFixed(2)}
+            </p>
+          </div>
+
+          {/* Total Expenses */}
+          <div className="bg-red-50 border border-red-200 p-4 rounded-lg">
+            <p className="text-sm text-red-700 font-medium">Total Expenses</p>
+            <p className="text-2xl font-bold text-red-600">
+              {totalExpense.toFixed(2)}
+            </p>
+          </div>
+
+          {/* Net Balance : Have used a ternary operator to switch up the colors between red and blue depending on the net balance outcome*/}
+          <div
+            className={`${
+              netBalance >= 0
+                ? "bg-blue-50 border border-blue-200"
+                : "bg-red-50 border-red-200"
+            } p-4 rounded-lg`}
+          >
+            <p
+              className={`text-sm font-medium ${
+                netBalance >= 0 ? "text-blue-700" : "text-red-700"
+              }`}
+            >
+              Net Balance
+            </p>
+            <p
+              className={`text-2xl font-bold ${
+                netBalance >= 0 ? "text-blue-600" : "text-red-600"
+              }`}
+            >
+              {netBalance.toFixed(2)}
+            </p>
+          </div>
         </div>
       </section>
 
