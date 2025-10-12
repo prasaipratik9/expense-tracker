@@ -162,7 +162,7 @@ function App() {
       {/* Filters section */}
       <section className="mb-6">
         <h2 className="text-xl font-semibold mb-4">Filters</h2>
-        <div className="flex gap-4 flex-wrap">
+        <div className="flex gap-4 flex-wrap justify-center">
           {/* Start of filter dropdown */}
           <label className="flex flex-col">
             <span className="font-medium mb-1">Category</span>
