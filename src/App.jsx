@@ -111,9 +111,10 @@ function App() {
               className="border rounded px-2 py-1"
               onChange={(e) => {
                 const value = e.target.value;
-                if (value === '' || parseFloat(value) >= 0) {
-                setForm({ ...form, amount: value });
-              }}}
+                if (value === "" || parseFloat(value) >= 0) {
+                  setForm({ ...form, amount: value });
+                }
+              }}
             />
           </label>
 
@@ -213,7 +214,10 @@ function App() {
           {/* Total Income */}
           <div className="bg-green-50 border border-green-200 p-4 rounded-lg">
             <p className="text-sm text-green-700 font-medium">Total Income</p>
-            <p className="text-2xl font-bold text-green-600">
+            <p
+              className="text-2xl font-bold text-green-600"
+              aria-label={"Total income: $${totalIncome.toFixed(2)}"}
+            >
               {totalIncome.toFixed(2)}
             </p>
           </div>
@@ -221,7 +225,10 @@ function App() {
           {/* Total Expenses */}
           <div className="bg-red-50 border border-red-200 p-4 rounded-lg">
             <p className="text-sm text-red-700 font-medium">Total Expenses</p>
-            <p className="text-2xl font-bold text-red-600">
+            <p
+              className="text-2xl font-bold text-red-600"
+              aria-label={"Total expense: $${totalExpense.toFixed(2)}"}
+            >
               {totalExpense.toFixed(2)}
             </p>
           </div>
@@ -233,11 +240,13 @@ function App() {
                 ? "bg-blue-50 border border-blue-200"
                 : "bg-red-50 border-red-200"
             } p-4 rounded-lg`}
+            aria-label={"Total netBalance: $${netBalance.toFixed(2)}"}
           >
             <p
               className={`text-sm font-medium ${
                 netBalance >= 0 ? "text-blue-700" : "text-red-700"
               }`}
+              aria-label={"Total netBalance: $${netBalance.toFixed(2)}"}
             >
               Net Balance
             </p>
@@ -245,6 +254,7 @@ function App() {
               className={`text-2xl font-bold ${
                 netBalance >= 0 ? "text-blue-600" : "text-red-600"
               }`}
+              aria-label={"Total netBalance: $${netBalance.toFixed(2)}"}
             >
               {netBalance.toFixed(2)}
             </p>
