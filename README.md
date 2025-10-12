@@ -16,11 +16,11 @@ A sleek **React-based expense tracking app** to manage your personal finances wi
 
 ## 🚀 Features
 
-- 💸 **Add Transactions** – Record income & expenses with date, amount, category, and optional notes  
+- 💸 **Add Transactions** – Record income & Expense with date, amount, category, and optional notes  
 - 🗑️ **Delete Transactions** – Remove individual transactions with one click  
 - 🎯 **Filter by Category** – View transactions by spending type  
 - 📅 **Filter by Month** – Analyze spending patterns over time  
-- 📊 **Financial Summary** – Real-time totals for **income**, **expenses**, and **net balance**  
+- 📊 **Financial Summary** – Real-time totals for **income**, **Expense**, and **net balance**  
 - 💾 **Data Persistence** – Stored locally using **localStorage API**  
 - 📱 **Responsive Design** – Works seamlessly across devices  
 - ✅ **Input Validation** – Prevents negative amounts & caps transactions at `$999,999.99`
@@ -72,7 +72,7 @@ Open http://localhost:5173 in your browser
 
 # 3️⃣ View Summary
 - Total Income
-- Total Expenses
+- Total Expense
 - Net Balance → Blue if positive, Red if negative
 
 4️⃣ Delete a Transaction
