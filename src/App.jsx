@@ -102,12 +102,18 @@ function App() {
             <span className="font-medium">Amount</span>
             <input
               type="number"
-              step="0.02"
+              min="0.01"
+              max="999999.99"
+              step="0.01"
               value={form.amount}
               required
               placeholder="e.g. 42.50"
               className="border rounded px-2 py-1"
-              onChange={(e) => setForm({ ...form, amount: e.target.value })}
+              onChange={(e) => {
+                const value = e.target.value;
+                if (value === '' || parseFloat(value) >= 0) {
+                setForm({ ...form, amount: value });
+              }}}
             />
           </label>
 
