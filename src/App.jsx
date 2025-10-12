@@ -3,11 +3,10 @@ import "./App.css";
 
 function App() {
   // State-variable-to-store-all-arrays (Update: Updated useState initialization to load data from localStorage on Mount)
-  const [transactions, setTransactions] = useState(()=> {
-    const saved = localStorage.getItem('transactions');
+  const [transactions, setTransactions] = useState(() => {
+    const saved = localStorage.getItem("transactions");
     return saved ? JSON.parse(saved) : [];
-  }
-  );
+  });
 
   // State object to hold form input values
   const [form, setForm] = useState({
@@ -17,10 +16,15 @@ function App() {
     note: "",
   });
 
-  //Saving to local storage
- useEffect(()=> {
-  localStorage.setItem('transactions', JSON.stringify(transactions));
- }, [transactions]);
+  const [filters, setFilters] = useState({
+    category: "All",
+    month: "All",
+  });
+
+  //Saving to local storage using useEffect
+  useEffect(() => {
+    localStorage.setItem("transactions", JSON.stringify(transactions));
+  }, [transactions]);
 
   // Function to handle submit events
   function handleSubmit(e) {
@@ -36,6 +40,17 @@ function App() {
   function handleDelete(id) {
     setTransactions((prev) => prev.filter((tx) => tx.id !== id));
   }
+
+  //Adding the filter logic
+  const filteredTransactions = transactions.filter((tx) => {
+    const matchesCategory =
+      filters.category === "All" || tx.category === filters.category;
+
+    const txMonth = tx.date.slice(0, 7);
+    const matchesMonth = filters.month === "All" || txMonth === filters.month;
+
+    return matchesCategory && matchesMonth;
+  });
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900 p-6">
       <h1 className="text-3xl font-bold text-blue-600">Expense Tracker</h1>
@@ -115,14 +130,62 @@ function App() {
         </form>
       </section>
 
+      {/* Filters section */}
+      <section className="mb-6">
+        <h2 className="text-xl font-semibold mb-4">Filters</h2>
+        <div className="flex gap-4 flex-wrap">
+          {/* Start of filter dropdown */}
+          <label className="flex flex-col">
+            <span className="font-medium mb-1">Category</span>
+            <select
+              value={filters.category}
+              onChange={(e) =>
+                setFilters({ ...filters, category: e.target.value })
+              }
+              className="border rounded px-3 py-2 bg-white"
+            >
+              <option value="All">All Categories</option>
+              <option value="Income">Income</option>
+              <option value="Transport">Transport</option>
+              <option value="Fitness & Health">Fitness & Health</option>
+              <option value="Eating out">Eating Out</option>
+              <option value="Fun">Fun</option>
+              <option value="Bills">Bills</option>
+              <option value="Others">Others</option>
+            </select>
+          </label>
+
+          {/* Start of month dropdown */}
+          <label className="flex flex-col">
+            <span className="font-medium mb-1">Month</span>
+            <input
+              type="month"
+              value={filters.month}
+              onChange={(e) =>
+                setFilters({ ...filters, month: e.target.value })
+              }
+              className="border rounded px-3 py-2 bg-white"
+            />
+          </label>
+
+          {/* Reset button for filters */}
+          <button 
+          onClick={() => setFilters({category: 'All', month: 'All'})}
+          className="self-end bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition"
+          >Reset Filters</button>
+        </div>
+      </section>
+
       {/* Transactions */}
       <section className="mt-8">
         <h2 className="text-xl font-semibold mb-2">Transactions</h2>
-        {transactions.length === 0 ? (
-          <p className="text-gray-500 italic">No transactions yet.</p>
+        {filteredTransactions.length === 0 ? (
+          <p className="text-gray-500 italic">
+            No transactions match your filter.
+          </p>
         ) : (
           <ul className="space-y-3">
-            {transactions.map((tx) => (
+            {filteredTransactions.map((tx) => (
               <li
                 key={tx.id}
                 className="bg-white p-4 rounded-xl shadow flex justify-between items-center"
@@ -140,12 +203,12 @@ function App() {
                   <p className="font-bold text-lg">
                     ${parseFloat(tx.amount).toFixed(2)}
                   </p>
-                   <button
-                        onClick={() => handleDelete(tx.id)}
-                        className="bg-red-600 text-white font-semibold px-3 py-1 rounded hover:bg-red-700 transition"
-                      >
-                        Delete
-                      </button>
+                  <button
+                    onClick={() => handleDelete(tx.id)}
+                    className="bg-red-600 text-white font-semibold px-3 py-1 rounded hover:bg-red-700 transition"
+                  >
+                    Delete
+                  </button>
                 </div>
               </li>
             ))}
